@@ -83,10 +83,11 @@ d64 does not use any padding at the end, as in base64.
 a d64 string encodes is always 2, 3, or 0. If the length % 4 is 1,
 that means there is 6 bits overhanging which is invalid.
 
-For characters which overhang the byte array, (i.e. the last character if length % 4 == 2 or 3)
-the overhanging portion must encode 0 bits.
+For characters which overhang the byte array
+(i.e. the last character if `length % 4` is 2 or 3)
+the overhanging portion must encode off bits.
 
-`if length % 4 == 2` then 4 bits overhang, the valid characters are: `.FVK`
+`if length % 4 == 2` then 4 bits overhang, the valid characters are: `.FVK`  
 `if length % 4 == 3` then 2 bits overhang, the valid characters are: `.37BFJNRVZcgkosw`
 
 ``` js
