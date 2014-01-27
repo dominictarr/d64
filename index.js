@@ -3,58 +3,51 @@ var Buffer = require('buffer').Buffer
 var CHARS = '.PYFGCRLAOEUIDHTNSQJKXBMWVZ_pyfgcrlaoeuidhtnsqjkxbmwvz1234567890'
   .split('').sort().join('')
 
-module.exports = function (chars) {
+module.exports = function (chars, exports) {
   chars = chars || CHARS
+  exports = exports || {}
   if(chars.length !== 64) throw new Error('a base 64 encoding requires 64 chars')
 
-//  var indexToCode = new Buffer(64)
   var codeToIndex = new Buffer(128)
-  //indexToCode.fill()
   codeToIndex.fill()
 
   for(var i = 0; i < 64; i++) {
     var code = chars.charCodeAt(i)
-//    indexToCode[i] = code
     codeToIndex[code] = i
   }
 
-  return {
-    encode: function (data) {
+  exports.encode = function (data) {
       var s = '', l = data.length, hang = 0
-      for(var i = 0; i < l || (i==l && (i)%3); i++) {
+      for(var i = 0; i < l; i++) {
         var v = data[i]
-        //console.log(i, v, i%3, chars)
+
         switch (i % 3) {
           case 0:
-      //      console.log(v >> 2, chars[v >> 2])
             s += chars[v >> 2]
-            hang = v & 3
+            hang = (v & 3) << 4
           break;
           case 1:
-    //        console.log(hang << 4 | v >> 4)
-            s += chars[hang << 4 | v >> 4]
-            hang = v & 0xf
+            s += chars[hang | v >> 4]
+            hang = (v & 0xf) << 2
           break;
           case 2:
-  //          console.log(hang << 4 | v >> 2)
-            if(v == null)
-              return s += chars[hang << 2]
-            s += chars[hang << 2 | v >> 6]
+            s += chars[hang | v >> 6]
             s += chars[v & 0x3f]
             hang = 0
           break;
         }
-//        console.log(s, hang, hang.toString(2))
+
       }
+      if(l%3) s += chars[hang]
       return s
-    },
-    decode: function (str) {
-      //console.log('decode', str)
+    }
+  exports.decode = function (str) {
       var l = str.length, j = 0
       var b = new Buffer(~~((l/4)*3)), hang = 0
 
       for(var i = 0; i < l; i++) {
         var v = codeToIndex[str.charCodeAt(i)]
+
         switch (i % 4) {
           case 0:
             hang = v << 2;
@@ -71,9 +64,12 @@ module.exports = function (chars) {
             b[j++] = hang | v
           break;
         }
-        //console.log('?', str[i], v, i, hang, b)
+
       }
       return b
     }
-  }
+  return exports
 }
+
+module.exports(CHARS, module.exports)
+
