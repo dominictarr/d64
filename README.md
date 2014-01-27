@@ -56,7 +56,8 @@ var sensible = '!@#$%^&*(){}?+|_"<>\',-.'
   .split('').sort().map(encodeURIComponent)
   .filter(function (e) { return e.length ==1 })
   .join('')
-``
+```
+
 the non-encoded characters are `!'()*-._~`
 
 `_` is an obvious choice, because it's very nearly always a valid character
