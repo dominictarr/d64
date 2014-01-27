@@ -1,0 +1,19 @@
+{
+  "name": "d64",
+  "description": "dominictarr style base64, like base64 but lexiographically sortable",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dominictarr/d64",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominictarr/d64.git"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)",
+  "license": "MIT"
+}
