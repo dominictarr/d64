@@ -15,11 +15,10 @@ var buf2 = d64.decode(string)
 ## Encoding binary as base 64 ascii
 
 There is already a well described base64 encoding [[1]]
-but it has some downsides, base 64 encoded are not lexiographically sortable,
-because the ascii characters do not have the same ordering as they unencoded
-bytes they encode. Consistent ordering is very useful when building database
-which needs sorting in an enviroment where a binary key is not possible
-(for example, in indexeddb or levelup[[2]] in the browser)
+but it has some downsides. Base64 encoded buffers are not lexiographically sortable,
+because the ascii characters do not have the same relative ordering as the unencoded
+bytes. Consistent ordering is very useful when building databases,
+which for some reason need to have ascii only keys.
 
 Also, it's simplest if all the characters used do not need to be encoded in
 common text inputs, such as URLs, or the shell. Finally, some of the 
@@ -27,12 +26,12 @@ non-alphanumeric characters may  trigger line breaks in a textarea,
 which can make the encoded string ambigious.
 
 There are other encodings which have addressed some of these issues,
-such as hex and base32[[1]], base58[[3]].
+such as hex and base32[[1]], base58[[2]].
 base16 or base32 expand the message more than necessary,
 and since base58 does not line up with a whole number of bits,
 then the implementation is not simple, and requires big integers.
 
-There are also other interesting encodings such as zbase32 [[4]] or proquints [[5]]
+There are also other interesting encodings such as zbase32 [[3]] or proquints [[4]]
 which are optimized for human transmission (recognition and pronouncability).
 
 d64 is optimized for being easy to implement, fast to encode/decode,
@@ -67,7 +66,7 @@ It's better not to choose `!` and `~`, because they are the first and last print
 characters, so they are quite useful for delimiting strings while maintaining the sorting
 properties - for instance strings of d64.
 
-`!` and `~` are commonly used in levelup[[2]], and that is one of the target applications for d64.
+`!` and `~` are commonly used in levelup[[5]], and that is one of the target applications for d64.
 
 `-` causes text areas to line wrap, so that is out.
 
@@ -103,10 +102,10 @@ your own encoding isn't a douchebag thing to do, but hey - everyone else does it
 ## References
 
 1. <http://www.rfc-base.org/txt/rfc-3548.txt>
-2. <https://github.com/rvagg/node-levelup>
-3. <http://search.cpan.org/~miyagawa/Encode-Base58-0.01/lib/Encode/Base58.pm>
-4. <http://search.cpan.org/~gwyn/Convert-zBase32-0.0201/lib/Convert/zBase32.pm>
-5. <http://arxiv.org/html/0901.4016>
+2. <http://search.cpan.org/~miyagawa/Encode-Base58-0.01/lib/Encode/Base58.pm>
+3. <http://search.cpan.org/~gwyn/Convert-zBase32-0.0201/lib/Convert/zBase32.pm>
+4. <http://arxiv.org/html/0901.4016>
+5. <https://github.com/rvagg/node-levelup>
 
 ## License
 
@@ -115,8 +114,8 @@ MIT
 ***
 
 [1]: http://www.rfc-base.org/txt/rfc-3548.txt
-[2]: https://github.com/rvagg/node-levelup
-[3]: http://search.cpan.org/~miyagawa/Encode-Base58-0.01/lib/Encode/Base58.pm
-[4]: http://search.cpan.org/~gwyn/Convert-zBase32-0.0201/lib/Convert/zBase32.pm
-[5]: http://arxiv.org/html/0901.4016
+[2]: http://search.cpan.org/~miyagawa/Encode-Base58-0.01/lib/Encode/Base58.pm
+[3]: http://search.cpan.org/~gwyn/Convert-zBase32-0.0201/lib/Convert/zBase32.pm
+[4]: http://arxiv.org/html/0901.4016
+[5]: https://github.com/rvagg/node-levelup
 
